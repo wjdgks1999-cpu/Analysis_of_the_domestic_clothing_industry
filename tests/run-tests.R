@@ -1,0 +1,10 @@
+# 역할: 프로젝트의 기능을 합성 자료와 독립 환경에서 검증한다.
+source("analysis_app/bootstrap.R", encoding = "UTF-8")
+app <- load_application_code("analysis_app")
+source("tests/helper-context.R", encoding = "UTF-8")
+context <- app$prepare_context(synthetic_context())
+results <- testthat::test_dir("tests/cases", reporter = "summary", env = environment(), stop_on_failure = TRUE)
+table <- as.data.frame(results)
+dir.create("tests/output", showWarnings = FALSE)
+utils::write.csv(table[, setdiff(names(table), "result")], "tests/output/test-results.csv", row.names = FALSE)
+cat("Test cases:", nrow(table), "Passed expectations:", sum(table$passed), "Failures:", sum(table$failed), "Errors:", sum(table$error), "\n")

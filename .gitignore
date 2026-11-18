@@ -1,0 +1,9 @@
+.runtime/
+.cache/
+.Rhistory
+.RData
+Rplots.pdf
+.Renviron
+context.final.RData
+credentials.rds
+tests/output/

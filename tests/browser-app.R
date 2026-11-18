@@ -1,0 +1,10 @@
+# 역할: 로컬 브라우저 검증에서만 합성 자료·대체 모형·일회성 인증을 사용한다.
+library(shiny)
+source("analysis_app/bootstrap.R", encoding = "UTF-8")
+source("tests/helper-context.R", encoding = "UTF-8")
+code <- load_application_code("analysis_app")
+secret <- Sys.getenv("CLOTHING_TEST_PASSWORD")
+if (!nzchar(secret)) stop("브라우저 검증용 일회성 인증이 필요합니다.")
+credentials <- data.frame(user = "synthetic-reviewer", password = secret, admin = FALSE)
+application <- code$create_application(synthetic_context(), credentials, synthetic_adapters())
+shiny::runApp(application, host = "127.0.0.1", port = as.integer(Sys.getenv("CLOTHING_TEST_PORT", "8766")), launch.browser = FALSE)
